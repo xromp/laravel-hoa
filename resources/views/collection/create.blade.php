@@ -19,7 +19,7 @@
         <label class="control-label col-md-3 col-sm-3 col-xs-12">Type <span class="required">*</span>
         </label>
         <div class="col-md-9 col-sm-9 col-xs-12">
-          <select class="form-control col-md-7 col-xs-12" ng-model="cc.collectionDetails.type" ng-init="cc.getRefList()" ng-change="cc.getRefList()" required>
+          <select class="form-control col-md-7 col-xs-12" ng-model="cc.collectionDetails.type" ng-init="cc.getRefList(cc.collectionDetails)" ng-change="cc.getRefList(cc.collectionDetails)" required>
             <option ng-repeat="type in cc.typeList" ng-bind="type.description" ng-value="type.code"></option>
           </select>
           <!-- <input type="text" name="type"  class="form-control col-md-7 col-xs-12" ng-model="cc.collectionDetails.type" required> -->
@@ -73,7 +73,7 @@
         <label class="control-label col-md-3 col-sm-3 col-xs-12">Category <span class="required">*</span>
         </label>
         <div class="col-md-9 col-sm-9 col-xs-12">
-          <select class="form-control" name="category" ng-model="cc.collectionDetails.category" required>
+          <select class="form-control" name="category" ng-model="cc.collectionDetails.category" ng-init="cc.getCategoryTypeList(cc.collectionDetails)" ng-change="cc.getCategoryTypeList(cc.collectionDetails)" required>
             <option ng-repeat="category in cc.categoryList" ng-bind="category.description" ng-value="category.code"></option>
           </select>
           <!-- <input type="text" name="type"  class="form-control col-md-7 col-xs-12" ng-model="cc.collectionDetails.category" required> -->
@@ -88,13 +88,27 @@
           </div>
           <div class="panel-content">
             <br>
-            <div class="form-group" ng-class="{'has-error': cc.frmCreate.entityvalue1.$invalid && cc.frmCreate.withError }">
-              <label class="control-label col-md-3 col-sm-3 col-xs-12">Reference </label>
-              <div class="col-md-9 col-sm-9 col-xs-12">
-                <input type="text" name="entityvalue1" class="form-control col-md-7 col-xs-12" ng-model="cc.collectionDetails.entityvalue1" required>
-                <span class="help-block" ng-show="cc.frmCreate.entityvalue1.$invalid && cc.frmCreate.withError">Reference is required field.</span>
+            <div class="form-group">
+              <div class="pull-right">
+                <button class="btn btn-danger" ng-click="cc.modifyYear('LESS')">Add Prev Year</button>
+                <button class="btn btn-success" ng-click="cc.modifyYear('ADD')">Add Next Year</button>
               </div>
+            </div>
 
+            <div class="form-group" ng-class="{'has-error': cc.frmCreate.entityvalues.$invalid && cc.frmCreate.withError }">
+              <!-- <label class="control-label col-md-3 col-sm-3 col-xs-12">Reference </label> -->
+              <div class="col-md-4 col-sm-9 col-xs-12" ng-class="{'col-md-offset-3':cc.categoryTypeList[0].year.length < 2}" ng-repeat="yr in cc.categoryTypeList[0].year">
+                <div class="row form-group" style="margin-bottom: 0px;" ng-repeat="month in cc.categoryTypeList[0].month | filter:{'year':yr}">
+                  <label>
+                    <input type="checkbox" name="" ng-model="cc.monthSelected[month.name]">
+                    <%month.description%>
+                  </label>
+                  <br>
+                  <!-- <input type="text" name="entityvalues" class="form-control col-md-7 col-xs-12" ng-model="cc.collectionDetails.entityvalues" required>
+                  <span class="help-block" ng-show="cc.frmCreate.entityvalues.$invalid && cc.frmCreate.withError">Reference is required field.</span> -->
+                </div>
+                <hr>
+              </div>
             </div>
             <div class="form-group" ng-class="{'has-error': cc.frmCreate.remarks.$invalid && cc.frmCreate.withError }">
               <label class="control-label col-md-3 col-sm-3 col-xs-12">Remarks </label>

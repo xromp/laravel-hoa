@@ -23,6 +23,9 @@ Route::get('/api/person/get','PersonController@getPersonProfile');
 Route::post('/api/collection/create','CollectionController@create');
 Route::get('/collection/view','CollectionController@index');
 
+// collection_category
+Route::get('/api/collection/category/get','CollectionCategoryController@get');
+
 
 // Route::group(['prefix'=>'api/person'], function() {
 // 	Route::get('/get',[

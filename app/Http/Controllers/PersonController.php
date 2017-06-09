@@ -29,9 +29,11 @@ class PersonController extends Controller
     	$person->lname = $request-> input('lname');
     	$person->fname = $request-> input('fname');
     	$person->mname = $request-> input('mname');
+        $person->type = 'OUTSIDE';
     	$person->datestarteffectivity = Carbon::now();
     	$person->dateendeffectivity = Carbon::now();
     	$person->createdby = 1;
+        $person->save();
     	
     	return response()->json([
 		    'status' => 200,
@@ -43,7 +45,8 @@ class PersonController extends Controller
     public function getPersonProfile(Request $request) 
     {
         $personid = $request-> input('personid');
-        $person_profile = DB::select('CALL sp_personprofile(?)',array($personid));
+        $type = $request-> input('type');
+        $person_profile = DB::select('CALL sp_personprofile(?,?)',array($personid,$type));
 
         return response()->json([
             'status'=> 200,

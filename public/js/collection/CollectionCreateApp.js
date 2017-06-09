@@ -4,10 +4,10 @@ define([
   'use strict';
     app.lazy.controller('CollectionCreateCtrl',CollectionCreateCtrl)
     app.lazy.controller('ModalInfoInstanceCtrl',ModalInfoInstanceCtrl)
-    app.lazy.factory('CollectionSrvcs', CollectionSrvcs)
+    app.lazy.factory('CollectionCreateSrvcs', CollectionCreateSrvcs)
 
-      CollectionCreateCtrl.$inject = ['$scope', '$filter', 'CollectionSrvcs','$uibModal','blockUI', '$http']
-      function CollectionCreateCtrl($scope, $filter, CollectionSrvcs, $uibModal, blockUI, $http){
+      CollectionCreateCtrl.$inject = ['$scope', '$filter', 'CollectionCreateSrvcs','$uibModal','blockUI', '$http']
+      function CollectionCreateCtrl($scope, $filter, CollectionCreateSrvcs, $uibModal, blockUI, $http){
         var vm = this;
 
         vm.collectionDetails = {
@@ -20,17 +20,30 @@ define([
         vm.init  = function() {
           vm.getOrList();
           vm.getCategoryList();
+
           vm.typeList = [
             {'id':1,'code':'HOMEOWNER','description':'Homeowner'},
             {'id':2,'code':'OUTSIDE','description':'Outside'}
           ];
+          vm.monthList = [];
+          vm.month = [
+            {'id':1,'code':'JAN','description':'January'},
+            {'id':2,'code':'FEB','description':'February'},
+            {'id':2,'code':'MAR','description':'March'},
+            {'id':2,'code':'APR','description':'April'},
+            {'id':2,'code':'MAY','description':'May'},
+            {'id':2,'code':'JUN','description':'June'},
+            {'id':2,'code':'JUL','description':'July'},
+            {'id':2,'code':'AUG','description':'August'},
+            {'id':2,'code':'SEP','description':'September'},
+            {'id':2,'code':'OCT','description':'October'},
+            {'id':2,'code':'NOV','description':'November'},
+            {'id':2,'code':'DEC','description':'December'}
+          ]
+          vm.year = [(new Date()).getFullYear()];
+          vm.populateMonths();
 
-          vm.monthList = [
-            {'id':1,'description':'JAN'},
-            {'id':1,'description':'FEB'},
-            {'id':1,'description':'MAR'}
-          ];
-        }
+        };
 
         vm.submit = function (data) {
           if (vm.frmCreate.$valid) {
@@ -38,13 +51,18 @@ define([
             
             var dataCopy = angular.copy(data);
             dataCopy.ordate = $filter('date')(dataCopy.ordate,'yyyy-MM-dd');
-            dataCopy.entityvalue = ['JAN','FEB'];
+            dataCopy.entityvalues = [
+              {'entityvalue1':'JAN','entityvalue2':'2017','entityvalue3':''},
+              {'entityvalue1':'FEB','entityvalue2':'2017','entityvalue3':''},
+              {'entityvalue1':'MAR','entityvalue2':'2017','entityvalue3':''},
+              {'entityvalue1':'APR','entityvalue2':'2017','entityvalue3':''}
+            ];
 
             var appBlockUI = blockUI.instances.get('blockUI');
             appBlockUI.start();
 
             var formData = angular.toJson(dataCopy);
-            CollectionSrvcs.save(formData)
+            CollectionCreateSrvcs.save(formData)
             .then (function (response) {
               if (response.data.status == 200) {
                 
@@ -59,7 +77,7 @@ define([
                   resolve :{
                     formData: function () {
                       return {
-                        title: 'Create People',
+                        title: 'Collection Entry',
                         message: response.data.message
                       };
                     }
@@ -71,7 +89,7 @@ define([
                 });
               appBlockUI.stop();
             },function(){alert("Error occured!");
-            appBlockUI.stop();
+              appBlockUI.stop();
             });
           } else {
             vm.frmCreate.withError = true;
@@ -83,7 +101,7 @@ define([
           data.person00id = 1;
           var formData = angular.toJson(dataCopy);
 
-          CollectionSrvcs.get(data)
+          CollectionCreateSrvcs.get(data)
           .then (function (response) {
             if (response.status == 200) {
             }
@@ -108,25 +126,75 @@ define([
         };
 
         vm.getRefList = function(data) {
-          var formData = angular.copy(data);
+          var formDataCopy = angular.copy(data);
+          vm.refList = [];
 
-          vm.refList = [
-            {'refid':1, 'type':'HOMEOWNER', 'name':'Penaflor, Rommel'},
-            {'refid':2, 'type':'HOMEOWNER', 'name':'Supnet, Erikson'}
-          ];
+          // var formData = angular.toJson(formDataCopy);
+          CollectionCreateSrvcs.getperson(formDataCopy)
+          .then( function(response, status) {
+            if (response.data.status == 200) {
+              vm.refList = response.data.data;
+            }
+          },function(){alert("Error occured!");
+          });
         };
 
         vm.getCategoryList = function() {
-          vm.categoryList = [
-            {'id':1, 'code':'MF','description':'Membership Fee'},
-            {'id':2, 'code':'MD','description':'Monthly Dues'},
-            {'id':3, 'code':'CS','description':'Car Sticker'}
-          ];
+
+          CollectionCreateSrvcs.getcategory()
+          .then(function(response, status){
+            if (response.status == 200) {
+              vm.categoryList = response.data.data;    
+            }
+          }, function(){
+            alert('Error!')
+          });
         };
 
         vm.datepickerOpen = function(i) {
           i.dtIsOpen = true;
         };
+
+        vm.getCategoryTypeList = function (i){
+          vm.categoryTypeList = [{'month':vm.monthList,'year':vm.year}];
+        };
+
+        vm.modifyYear = function(i) {
+          var tempHighYear = 0;
+          var tempLowYear = 2099;
+          var newYear;
+
+          angular.forEach(vm.year, function(v, k){
+            if (v > tempHighYear && i=='ADD') {
+              tempHighYear = v;
+              newYear = tempHighYear+1;
+            }
+
+            if (v < tempLowYear && i == 'LESS') {
+              tempLowYear =v;
+              newYear = tempLowYear-1
+            }
+          });
+
+          vm.year.push(newYear);
+          vm.populateMonths();
+        };
+
+        vm.populateMonths = function() {
+          vm.monthList = [];
+          angular.forEach(vm.year, function(v1, k1){
+              angular.forEach(vm.month, function(v2, k2) {
+                vm.monthList.push({
+                  'code':v2.code,
+                  'year':v1,
+                  'description':v2.code +'-'+v1,
+                  'name':v2.code +'-'+v1
+                });
+              });
+          });
+          vm.getCategoryTypeList();
+          console.log(vm.monthList);
+        }
 
         vm.init();
       }
@@ -144,8 +212,8 @@ define([
         };
       }
 
-      CollectionSrvcs.$inject = ['$http']
-      function CollectionSrvcs($http){
+      CollectionCreateSrvcs.$inject = ['$http']
+      function CollectionCreateSrvcs($http){
         return {
           save: function(data) {
             return $http({
@@ -163,11 +231,18 @@ define([
               headers: {'Content-Type': 'application/json'}
             })
           },
-          protected: function(data) {
+          getperson: function(data) {
             return $http({
               method:'GET',
-              url: baseUrlApi + '/api/protected',
-              headers: {'Content-Type': 'application/json','Authorization': 'admin'+':'+'admin'}
+              url: '/api/person/get?type='+data.type,
+              headers: {'Content-Type': 'application/json'}
+            })
+          },
+          getcategory: function(data) {
+            return $http({
+              method:'GET',
+              url: '/api/collection/category/get',
+              headers: {'Content-Type': 'application/json'}
             })
           },
         }
