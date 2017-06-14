@@ -42,6 +42,14 @@ define('sims.collection',[
 					'/js/collection/CollectionCreateApp.js'
 				])
 			})
+			.when('/collection/reports',{
+				templateUrl:'collection.reports.base',
+				controller:'ReportCtrl',
+				controllerAs:'rc',
+				resolve:dependencyResolver([
+					'/js/collection/ReportApp.js'
+				])
+			})
 			.otherwise({template:'<p>Wrong Url.</p>'})
 
             var markUp = '';

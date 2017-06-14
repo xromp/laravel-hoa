@@ -26,8 +26,8 @@
           <td class="text-right" ng-bind="collection.orno"></td>
           <td ng-bind="collection.ordate | date:'dd-MMM-yyyy'"></td>
           <td ng-bind="collection.category"></td>
-          <td class="text-right" ng-bind="collection.amount"></td>
-          <td ng-bind="collection.datecreated | date:'dd-MMM-yyyy'"></td>
+          <td class="text-right" ng-bind="collection.amount_paid"></td>
+          <td ng-bind="collection.created_at | date:'dd-MMM-yyyy'"></td>
           <td class="">
             <div class="pull-right">
               <button class="btn btn-success btn-xs"><i class="glyphicon glyphicon-ok"></i></button>

@@ -48,7 +48,7 @@ define([
                 });
               appBlockUI.stop();
             },function(){alert("Error occured!");
-            appBlockUI.stop();
+              appBlockUI.stop();
             });
           } else {
             vm.frmCreate.withError = true;
@@ -56,11 +56,25 @@ define([
         };
 
         vm.get = function (data) {
-          vm.collectionDetails = [
-            {'orno':46,'ordate':'2017-05-03','category':'Membership Fees','amount':'1000','datecreated':'2017-06-31'},
-            {'orno':3,'ordate':'2017-05-01','category':'Car Sticker','amount':'150.00','datecreated':'2017-07-31'},
-            {'orno':45,'ordate':'2017-05-02','category':'Car Sticker','amount':'150.00','datecreated':'2017-07-31'}
-          ]
+          var appBlockUI = blockUI.instances.get('blockUI');
+          appBlockUI.start();
+
+          CollectionViewSrvcs.get()
+          .then (function (response) {
+            if (response.data.status == 200) {
+              vm.collectionDetails = response.data.data;
+            } else {
+
+            }
+            appBlockUI.stop();
+          },function(){alert("Error occured!");
+            appBlockUI.stop();
+          });
+          // vm.collectionDetails = [
+          //   {'orno':46,'ordate':'2017-05-03','category':'Membership Fees','amount':'1000','datecreated':'2017-06-31'},
+          //   {'orno':3,'ordate':'2017-05-01','category':'Car Sticker','amount':'150.00','datecreated':'2017-07-31'},
+          //   {'orno':45,'ordate':'2017-05-02','category':'Car Sticker','amount':'150.00','datecreated':'2017-07-31'}
+          // ]
           // vm.collectionDetails[0].ordate = $filter('date')(new Date(),'dd-MMM-yyyy');
           // console.log(vm.collectionDetails[0]);
           // $filter('date')(new Date(),'yyyy-MM-dd');
@@ -118,7 +132,7 @@ define([
             return $http({
               method:'GET',
               data:data,
-              url: baseUrlApi + '/api/person?person00id='+ data.person00id,
+              url: '/api/collection/get',
               headers: {'Content-Type': 'application/json'}
             })
           },

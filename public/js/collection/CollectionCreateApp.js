@@ -14,7 +14,8 @@ define([
           type:'HOMEOWNER',
           refid:'',
           qty:1,
-          amount:0
+          amount:0,
+          category:'CARSTICKER'
         };
 
         vm.init  = function() {
@@ -25,7 +26,7 @@ define([
             {'id':1,'code':'HOMEOWNER','description':'Homeowner'},
             {'id':2,'code':'OUTSIDE','description':'Outside'}
           ];
-          vm.monthList = [];
+
           vm.month = [
             {'id':1,'code':'JAN','description':'January'},
             {'id':2,'code':'FEB','description':'February'},
@@ -43,6 +44,10 @@ define([
           vm.year = [(new Date()).getFullYear()];
           vm.populateMonths();
 
+          // CAR STICKER
+          vm.stickerDetails = [
+            {'stickerid':'', 'plateno':''}
+          ]
         };
 
         vm.submit = function (data) {
@@ -51,13 +56,30 @@ define([
             
             var dataCopy = angular.copy(data);
             dataCopy.ordate = $filter('date')(dataCopy.ordate,'yyyy-MM-dd');
-            dataCopy.entityvalues = [
-              {'entityvalue1':'JAN','entityvalue2':'2017','entityvalue3':''},
-              {'entityvalue1':'FEB','entityvalue2':'2017','entityvalue3':''},
-              {'entityvalue1':'MAR','entityvalue2':'2017','entityvalue3':''},
-              {'entityvalue1':'APR','entityvalue2':'2017','entityvalue3':''}
-            ];
+            dataCopy.entityvalues = [];
 
+            if (data.category == 'MONTHLYDUES') {
+              angular.forEach(vm.monthSelected, function(v, k){
+                if (v) {
+                  dataCopy.entityvalues.push({
+                    'entityvalue1':k.split('-')[0],
+                    'entityvalue2':k.split('-')[1],
+                    'entityvalue3':''
+                  })
+                }
+              });
+            } else if (data.category == 'CARSTICKER') {
+              angular.forEach(vm.stickerDetails, function(v, k) {
+                if (v) {
+                  dataCopy.entityvalues.push({
+                    'entityvalue1':v.stickerid,
+                    'entityvalue2':v.plateno,
+                    'entityvalue3':''
+                  });
+                }
+              });
+            }
+            
             var appBlockUI = blockUI.instances.get('blockUI');
             appBlockUI.start();
 
@@ -193,8 +215,15 @@ define([
               });
           });
           vm.getCategoryTypeList();
-          console.log(vm.monthList);
-        }
+        };
+
+        vm.addCarSticker = function() {
+          vm.stickerDetails.push({'stickerid':'', 'plateno':''});
+        };
+        
+        vm.removeCarSticker = function(i) {
+          vm.stickerDetails.splice(i,1);
+        };
 
         vm.init();
       }

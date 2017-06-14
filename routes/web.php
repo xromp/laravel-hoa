@@ -21,10 +21,17 @@ Route::post('/api/person/create','PersonController@store');
 Route::get('/api/person/get','PersonController@getPersonProfile');
 
 Route::post('/api/collection/create','CollectionController@create');
-Route::get('/collection/view','CollectionController@index');
+Route::get('/api/collection/get','CollectionController@get');
+
 
 // collection_category
 Route::get('/api/collection/category/get','CollectionCategoryController@get');
+
+
+// collection reports
+Route::get('/collection/view','CollectionController@index');
+Route::get('/collection/reports','CollectionController@index');
+Route::get('/collection/reports/orlisting','CollectionController@reports_orlisting');
 
 
 // Route::group(['prefix'=>'api/person'], function() {

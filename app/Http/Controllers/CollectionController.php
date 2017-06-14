@@ -25,7 +25,7 @@ class CollectionController extends Controller
     	$validator = Validator::make($request->all(),[
 			'amount'=> 'required',
     		'category'=> 'required',
-    		'entityvalue1'=> 'required',
+    		'entityvalues'=> 'required',
     		'ordate'=> 'required',
     		'orno'=> 'required',
     		'orno'=> 'required',
@@ -111,5 +111,62 @@ class CollectionController extends Controller
                 'message'=>'Successfully saved.'
             ]);    		
     	}    
+    }
+
+    public function get(Request $request)
+    {
+        $formData = new Collection;
+
+        $formData->collectionid = $request ->input('collectionid');
+        $formData->orno         = $request ->input('ordno');
+        $formData->ordate       = $request ->input('ordate');
+
+        $collection = DB::table('collection')
+            -> leftjoin('collection_category','collection_category.code','=','collection.category')
+            ->select ('orno','ordate','collection_category.description as category','amount_paid','collection.created_at');
+
+
+        if ($formData->orno) {
+            $collection -> where('orno',$formData->orno);            
+        }
+        $collection = $collection->get();
+
+        return response()-> json([
+            'status'=>200,
+            'data'=>$collection,
+            'message'=>''
+        ]);
+    }
+
+    public function reports_orlisting(Request $request)
+    {   
+
+        $formData = array(
+            'startdate' => $request-> input('startdate'),
+            'enddate' => $request-> input('enddate')
+        );
+
+        $total = 0;
+        $data = [];
+        // dd($formData);
+
+        $orlist = DB::table('collection')
+            -> leftjoin('collection_category','collection_category.code','=','collection.category')
+            ->select ('orno','ordate','collection_category.description as category','amount_paid','collection.created_at');
+
+        if ($formData['startdate'] && $formData['enddate']) {
+            $orlist = $orlist
+                 ->whereBetween('ordate', [$formData['startdate'], $formData['enddate']]);
+        }
+        foreach ($orlist->get() as $key => $or) {
+            $total += $or->amount_paid;
+        }
+
+        $data = array(
+            'orlist'=>$orlist->get(),
+            'total'=> number_format($total, 2, '.', ','),
+            'formData'=>$formData
+        );
+        return view('collection.reports.orlisting', array('data'=>$data));
     }
 }
