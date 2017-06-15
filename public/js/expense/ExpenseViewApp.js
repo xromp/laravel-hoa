@@ -2,12 +2,12 @@ define([
   'angular'
  ],function () {
   'use strict';
-    app.lazy.controller('CollectionViewCtrl',CollectionViewCtrl)
+    app.lazy.controller('ExpenseViewCtrl',ExpenseViewCtrl)
     app.lazy.controller('ModalInfoInstanceCtrl',ModalInfoInstanceCtrl)
-    app.lazy.factory('CollectionViewSrvcs', CollectionViewSrvcs)
+    app.lazy.factory('ExpenseViewSrvcs', ExpenseViewSrvcs)
 
-      CollectionViewCtrl.$inject = ['$scope', '$filter', 'CollectionViewSrvcs','$uibModal','blockUI', '$http']
-      function CollectionViewCtrl($scope, $filter, CollectionViewSrvcs, $uibModal, blockUI, $http){
+      ExpenseViewCtrl.$inject = ['$scope', '$filter', 'ExpenseViewSrvcs','$uibModal','blockUI', '$http']
+      function ExpenseViewCtrl($scope, $filter, ExpenseViewSrvcs, $uibModal, blockUI, $http){
         var vm = this;
 
         vm.query = {
@@ -23,10 +23,10 @@ define([
           var appBlockUI = blockUI.instances.get('blockUI');
           appBlockUI.start();
 
-          CollectionViewSrvcs.get()
+          ExpenseViewSrvcs.get()
           .then (function (response) {
             if (response.data.status == 200) {
-              vm.collectionDetails = response.data.data;
+              vm.expenseDetails = response.data.data;
             } else {
 
             }
@@ -36,8 +36,8 @@ define([
           });
         };
 
-        vm.addCollection = function (){
-          vm.templateUrl='collection.create';
+        vm.addExpense = function (){
+          vm.templateUrl='expense.create';
         };
         
         vm.post = function(i) {
@@ -48,7 +48,7 @@ define([
           formDataCopy.trantype = 'COLLECTION';
 
           var formData = angular.toJson(formDataCopy);
-          CollectionViewSrvcs.post(formData)
+          ExpenseViewSrvcs.post(formData)
           .then(function(response, status){
             if (response.data.status == 200) {
               i.posted = 1;  
@@ -82,7 +82,7 @@ define([
           var formDataCopy = angular.copy(i)
 
           var formData = angular.toJson(formDataCopy);
-          CollectionViewSrvcs.delete(formData)
+          ExpenseViewSrvcs.delete(formData)
           .then(function(response, status){
             if (response.data.status == 200) {
               i.deleted = 1;  
@@ -124,8 +124,8 @@ define([
         };
       }
 
-      CollectionViewSrvcs.$inject = ['$http']
-      function CollectionViewSrvcs($http){
+      ExpenseViewSrvcs.$inject = ['$http']
+      function ExpenseViewSrvcs($http){
         return {
           save: function(data) {
             return $http({
@@ -142,7 +142,7 @@ define([
             return $http({
               method:'GET',
               data:data,
-              url: '/api/collection/get',
+              url: '/api/expense/get',
               headers: {'Content-Type': 'application/json'}
             })
           },
@@ -158,7 +158,7 @@ define([
             return $http({
               method:'POST',
               data:data,
-              url: '/api/collection/delete',
+              url: '/api/expense/delete',
               headers: {'Content-Type': 'application/json'}
             })
           },

@@ -122,9 +122,9 @@ class CollectionController extends Controller
         $formData->ordate       = $request ->input('ordate');
 
         $collection = DB::table('collection')
+            ->select ('collectionid','orno','ordate','collection_category.description as category','amount_paid','posted','deleted','collection.created_at')
             -> leftjoin('collection_category','collection_category.code','=','collection.category')
-            ->select ('orno','ordate','collection_category.description as category','amount_paid','collection.created_at');
-
+            -> where('deleted',0);
 
         if ($formData->orno) {
             $collection -> where('orno',$formData->orno);            
@@ -168,5 +168,39 @@ class CollectionController extends Controller
             'formData'=>$formData
         );
         return view('collection.reports.orlisting', array('data'=>$data));
+    }
+
+    public function delete(Request $request)
+    {
+        $formData = array(
+            'orno'=> $request-> input('orno')
+        );
+
+        $isORNoExist = DB::table('transaction')
+            -> where('refid',$formData['orno'])
+            -> first();
+
+        if ($isORNoExist) {
+
+            if ($isORNoExist->posted) {
+                return response() -> json([
+                    'status'=>403,
+                    'data'=>'',
+                    'message'=>"OR no. {$isORNoExist->refid} is already posted."
+                ]);
+            }
+        }
+
+        DB::transaction(function($formData) use($formData){
+            DB::table('collection')
+                -> where('orno',$formData['orno'])
+                -> update(['deleted'=>1]);
+        });
+
+        return response() -> json([
+            'status'=>200,
+            'data'=>'',
+            'message'=>"Successfully deleted."
+        ]);
     }
 }

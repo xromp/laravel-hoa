@@ -28,6 +28,7 @@
           <li><a><i class="fa fa-edit"></i> Collection <span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu">
               <li><a href="/collection/view">Collection Entry</a></li>
+              <li><a href="/expense/view">Expense Entry</a></li>
               <li><a href="/collection/reports">Reports</a></li>
             </ul>
           </li>

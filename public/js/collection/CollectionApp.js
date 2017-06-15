@@ -8,7 +8,7 @@ define([
     function CollectionCtrl($scope, $filter){
       var vm = this;
 
-      vm.templateUrl = 'collection.create';
+      vm.templateUrl = 'collection.view';
 
       vm.addCollection = function (){
         vm.templateUrl='collection.create';
