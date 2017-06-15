@@ -28,7 +28,6 @@
           <td ng-bind="collection.category"></td>
           <td class="text-right" ng-bind="collection.amount_paid"></td>
           <td ng-bind="collection.created_at | date:'dd-MMM-yyyy'"></td>
-          <td ng-bind="collection.posted"></td>
           <td class="">
             <div class="pull-right">
               <button class="btn btn-success btn-xs" ng-disabled="collection.posted || collection.deleted" ng-click="cv.post(collection)"><i class="glyphicon glyphicon-ok"></i></button>

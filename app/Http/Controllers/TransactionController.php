@@ -56,7 +56,7 @@ class TransactionController extends Controller
     	
     	$collection = $collection->get();
     	$expense = $expense->get();
-
+        
     	foreach ($collection as $key => $col) {
     		$totalCollection += $col->amount;
     	}

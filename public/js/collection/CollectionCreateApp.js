@@ -252,7 +252,7 @@ define([
 
           var modalInstance = $uibModal.open({
             controller:'ModalInfoInstanceCtrl',
-            templateUrl:'shared.modal.info',
+            templateUrl:'collection.add-category',
             controllerAs: 'vm',
             resolve :{
               formData: function () {

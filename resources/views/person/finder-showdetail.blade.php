@@ -67,5 +67,70 @@
 			</table>
 		  </div>
 		</div>
+		<div class="col-md-6">
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<h5 class="panel-title">Monthly Dues<small>for the whole year</small></h5>
+					<div class="clearfix"></div>
+				</div>
+				<div class="panel-content">
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th>#</th>
+								<th>Month</th>
+								<th>Status</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>1</td>
+								<td>JAN-2017</td>
+								<td>PAID</td>
+							</tr>
+
+							<tr>
+								<td>2</td>
+								<td>FEB-2017</td>
+								<td>PAID</td>
+							</tr>
+
+							<tr>
+								<td>3</td>
+								<td>MAR-2017</td>
+								<td>-</td>
+							</tr>
+
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<h5 class="panel-title">Registered Car<small></small></h5>
+					<div class="clearfix"></div>
+				</div>
+				<div class="panel-content">
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th>#</th>
+								<th>Sticker ID</th>
+								<th>Plate No.</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>1</td>
+								<td>S-001</td>
+								<td>WED-000</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
   	</div>
 </td>

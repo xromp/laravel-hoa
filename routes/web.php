@@ -17,6 +17,11 @@ Route::get('/', function () {
 Route::get('/person/create','PersonController@index');
 Route::get('/person/finder','PersonController@index');
 
+// login
+Route::get('/login','LoginController@index');
+Route::post('/api/login','LoginController@login');
+
+
 // person
 Route::post('/api/person/create','PersonController@store');
 Route::get('/api/person/get','PersonController@getPersonProfile');
