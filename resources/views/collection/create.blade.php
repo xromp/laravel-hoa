@@ -1,14 +1,13 @@
 <form name="cc.frmCreate" class="form-horizontal form-label-left" ng-controller="CollectionCreateCtrl as cc" novalidate>
   <div class="row">
-    <div class="col-md-5 form-group pull-right">
+<!--     <div class="col-md-5 form-group pull-right">
       <label class="control-label col-md-4">Copy From:</label>
       <div class="col-md-8">
         <select class="form-control" ng-model="cc.collectionDetails.id">
           <option ng-repeat="or in cc.orList" ng-bind="or.orno + '('+ or.category +')'" ng-value='or.id'></option>
         </select>
-        <!-- <input type="text" name="collectionid" class="form-control" ng-model="p.personInfo.collectionid"> -->
       </div>
-    </div>    
+    </div>     -->
   </div>
 
   <div class="row">
@@ -60,10 +59,15 @@
           <small>(Members/Outside)</small>
         </label>
         <div class="col-md-9 col-sm-9 col-xs-12">
-          <select class="form-control" name="refid" ng-model="cc.collectionDetails.refid" required>
-            <option value="">Select from <% cc.collectionDetails.type %> ...</option>
-            <option ng-repeat="ref in cc.refList" ng-bind="ref.name" ng-value="ref.refid"></option>
-          </select>
+          <p class="input-group">
+            <select class="form-control" name="refid" ng-model="cc.collectionDetails.refid" required>
+              <option value="">Select from <% cc.collectionDetails.type %> ...</option>
+              <option ng-repeat="ref in cc.refList" ng-bind="ref.name" ng-value="ref.refid"></option>
+            </select>
+            <span class="input-group-btn">
+              <button class="btn btn-success" ng-click="cc.addRef()"><i class="glyphicon glyphicon-plus"></i></button>
+            </span>
+          </p>
           <!-- <input type="text" name="refid" class="form-control col-md-7 col-xs-12" ng-model="cc.collectionDetails.refid" required> -->
           <span class="help-block" ng-show="cc.frmCreate.refid.$invalid && cc.frmCreate.withError">From is required field.</span>
         </div>
@@ -73,10 +77,16 @@
         <label class="control-label col-md-3 col-sm-3 col-xs-12">Category <span class="required">*</span>
         </label>
         <div class="col-md-9 col-sm-9 col-xs-12">
-          <select class="form-control" name="category" ng-model="cc.collectionDetails.category" ng-init="cc.getCategoryTypeList(cc.collectionDetails)" ng-change="cc.getCategoryTypeList(cc.collectionDetails)" required>
-            <option ng-repeat="category in cc.categoryList" ng-bind="category.description" ng-value="category.code"></option>
-          </select>
-          <!-- <input type="text" name="type"  class="form-control col-md-7 col-xs-12" ng-model="cc.collectionDetails.category" required> -->
+          <p class="input-group">
+            <select class="form-control" name="category" ng-model="cc.collectionDetails.category" ng-init="cc.getCategoryTypeList(cc.collectionDetails)" ng-change="cc.getCategoryTypeList(cc.collectionDetails)" required>
+              <option ng-repeat="category in cc.categoryList" ng-bind="category.description" ng-value="category.code"></option>
+            </select>
+            <span class="input-group-btn">
+              <button class="btn btn-success" ng-click="cc.addCategory()"><i class="glyphicon glyphicon-plus"></i></button>
+            </span>
+          </p>
+          <!-- <input type="text" name="type"  
+          class="form-control col-md-7 col-xs-12" ng-model="cc.collectionDetails.category" required> -->
           <span class="help-block" ng-show="cc.frmCreate.category.$invalid && cc.frmCreate.withError">Categorys is required field.</span>
         </div>
       </div>

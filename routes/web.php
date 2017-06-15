@@ -17,8 +17,10 @@ Route::get('/', function () {
 Route::get('/person/create','PersonController@index');
 Route::get('/person/finder','PersonController@index');
 
+// person
 Route::post('/api/person/create','PersonController@store');
 Route::get('/api/person/get','PersonController@getPersonProfile');
+Route::get('/api/person/collection/get','PersonController@getPersonCollection');
 
 Route::post('/api/collection/create','CollectionController@create');
 Route::get('/api/collection/get','CollectionController@get');
@@ -46,7 +48,9 @@ Route::post('/api/transaction/post','TransactionController@post');
 // expenses
 Route::get('/expense/view','ExpenseController@index');
 Route::get('/api/expense/get','ExpenseController@get');
-
+Route::post('/api/expense/create','ExpenseController@create');
+Route::post('/api/expense/delete','ExpenseController@delete');
+Route::get('/api/expense/category/get','ExpenseCategoryController@get');
 // Route::group(['prefix'=>'api/person'], function() {
 // 	Route::get('/get',[
 // 		'as'=>'getPersonProfile',

@@ -45,7 +45,7 @@ define([
           formDataCopy.refid = formDataCopy.orno;
           formDataCopy.refdate = $filter('date')(formDataCopy.ordate,'yyyy-MM-dd');
           formDataCopy.amount = formDataCopy.amount_paid;
-          formDataCopy.trantype = 'COLLECTION';
+          formDataCopy.trantype = 'EXPENSE';
 
           var formData = angular.toJson(formDataCopy);
           ExpenseViewSrvcs.post(formData)

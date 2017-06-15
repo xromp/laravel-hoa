@@ -84,13 +84,7 @@
               <input id="birthday" class="date-picker form-control col-md-7 col-xs-12" type="text">
             </div>
           </div>
-          <div class="form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">Person Id <span class="required">*</span>
-            </label>
-            <div class="col-md-6 col-sm-6 col-xs-12">
-              <input name="person00id" class="date-picker form-control col-md-7 col-xs-12" type="text" ng-model="p.personInfo.person00id">
-            </div>
-          </div>
+
           <div class="ln_solid"></div>
           <div class="form-group">
             <div class="pull-right">
@@ -100,14 +94,6 @@
             </div>
           </div>
         </form>
-            <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-    
         @include('layouts.errors')
       </div>
     </div>

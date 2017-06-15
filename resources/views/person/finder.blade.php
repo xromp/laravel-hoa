@@ -40,6 +40,9 @@
         <div class="clearfix"></div>
       </div>
       <div class="x_content">
+        <div class="pull-right">
+          <a class="btn btn-success" href="/person/create"><i class="glyphicon glyphicon-plus"></i> Add Member</a>
+        </div>
         <br />
         <table class="table table-hover">
           <thead>
@@ -49,7 +52,7 @@
                 <small>Address</small>
               </th>
               <th>Type</th>
-              <th>Current Biling</th>
+              <th>Total Contributions</th>
             </tr>
           </thead>
           <tbody ng-repeat="person in pf.personData">
@@ -63,7 +66,7 @@
               </a>
               </td>
               <td ng-bind="person.type"></td>
-              <td class="text-right" ng-bind="person.current_billing"></td>
+              <td class="text-right" ng-bind="person.total_collection"></td>
             </tr>
             <tr style="background-color: #f7f7f7;" showdetail person="person" showdetails="person.isshowdetails"></tr>
           </tbody>

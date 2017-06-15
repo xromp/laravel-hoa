@@ -78,6 +78,12 @@ define([
                   });
                 }
               });
+            } else {
+              dataCopy.entityvalues.push({
+                'entityvalue1':'',
+                'entityvalue2':'',
+                'entityvalue3':''
+              });
             }
             
             var appBlockUI = blockUI.instances.get('blockUI');
@@ -223,6 +229,40 @@ define([
         
         vm.removeCarSticker = function(i) {
           vm.stickerDetails.splice(i,1);
+        };
+
+        vm.addRef = function(){
+          var modalInstance = $uibModal.open({
+            controller:'ModalInfoInstanceCtrl',
+            templateUrl:'shared.modal.info',
+            controllerAs: 'vm',
+            resolve :{
+              formData: function () {
+                return {
+                  title: 'Add person in '+ vm.collectionDetails.type
+                  // message: response.data.message
+                };
+              }
+            }
+          });
+
+        };
+
+        vm.addCategory = function(){
+
+          var modalInstance = $uibModal.open({
+            controller:'ModalInfoInstanceCtrl',
+            templateUrl:'shared.modal.info',
+            controllerAs: 'vm',
+            resolve :{
+              formData: function () {
+                return {
+                  title: 'Add Category'
+                  // message: response.data.message
+                };
+              }
+            }
+          });
         };
 
         vm.init();

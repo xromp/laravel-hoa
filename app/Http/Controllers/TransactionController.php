@@ -100,6 +100,8 @@ class TransactionController extends Controller
 
     	$isORNoExist = DB::table('transaction')
     		-> where('refid',$formData['refid'])
+            -> where('trantype',$formData['trantype'])
+            -> where('deleted',0)
     		-> first();
     	if ($isORNoExist) {
     		if ($isORNoExist->posted) {
@@ -114,9 +116,17 @@ class TransactionController extends Controller
     	DB::transaction(function($formData) use($formData) {
     		$transaction  = new Transaction;
 
-    		DB::table('collection')
-    			-> where('orno',$formData['refid'])
-    			-> update(['posted'=>1]);
+            if ($formData['trantype'] == 'COLLECTION') {
+        		DB::table('collection')
+        			-> where('orno',$formData['refid'])
+        			-> update(['posted'=>1]);
+            } else if ($formData['trantype'] == 'EXPENSE') {
+                DB::table('expense')
+                    -> where('orno',$formData['refid'])
+                    -> update(['posted'=>1]);
+            } else {
+                throw new \Exception('Transaction posting failed.');   
+            }
 
     		$transaction->trantype		= $formData['trantype'];
     		$transaction->refid			= $formData['refid'];
