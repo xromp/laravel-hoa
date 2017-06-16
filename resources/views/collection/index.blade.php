@@ -10,8 +10,12 @@
 <script type="text/ng-template" id="collection.view">
 	@include('collection.view')
 </script>
-
-
+<script type="text/ng-template" id="collection.add-category">
+	@include('collection.add-category')
+</script>
+<script type="text/ng-template" id="collection.add-person">
+	@include('collection.add-person')
+</script>
 <script type="text/ng-template" id="collection.reports.base">
 	@include('collection.reports.base')
 </script>

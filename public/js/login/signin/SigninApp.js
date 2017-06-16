@@ -29,7 +29,7 @@ define([
              vm.loginCallBack = response.data;
               if (response.data.status == 200) {
                vm.display.loading = false;
-               $window.location.href = '/people/finder'
+               $window.location.href = '/dashboard'
               } else {
                 vm.display.loading = false;
               }

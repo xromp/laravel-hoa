@@ -5,14 +5,12 @@ define('sims.person',[
 ], function(angular, dependencyResolver){
 	'use strict';
 	 app = angular
-		.module('sims.person',['ngRoute','ngAnimate','ngSanitize','ui.bootstrap', 'blockUI', function($interpolateProvider) {
-			$interpolateProvider.startSymbol = '<%';
-			$interpolateProvider.endSymbol = '%>';
+		.module('sims.person',['SidebarApp','ngRoute','ngAnimate','ngSanitize','ui.bootstrap', 'blockUI', function() {
 		}])
 		.config(Config)
 
-		Config.$inject = ['$routeProvider', '$locationProvider', '$controllerProvider', '$compileProvider', '$filterProvider', '$provide', 'blockUIConfig']
-		function Config($routeProvider, $locationProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, blockUIConfig){
+		Config.$inject = ['$routeProvider', '$locationProvider', '$controllerProvider', '$compileProvider', '$filterProvider', '$provide', 'blockUIConfig', '$interpolateProvider']
+		function Config($routeProvider, $locationProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, blockUIConfig, $interpolateProvider){
 			app.lazy = {	
 				controller :$controllerProvider.register,
 				directive  :$compileProvider.directive,
@@ -21,6 +19,10 @@ define('sims.person',[
 				service    :$provide.service,
 				blockUI    : blockUIConfig,
 			}
+			console.log('peson');
+
+	    	$interpolateProvider.startSymbol('<%');
+    		$interpolateProvider.endSymbol('%>');
 
 			$locationProvider.html5Mode(true);
 			$routeProvider
@@ -33,6 +35,14 @@ define('sims.person',[
 				])
 			})
 			.when('/person/create',{
+				templateUrl:'person.create',
+				controller:'PersonCreateCtrl',
+				controllerAs:'p',
+				resolve:dependencyResolver([
+					'/js/person/PersonCreateApp.js'
+				])
+			})
+			.when('/person/edit/:personid',{
 				templateUrl:'person.create',
 				controller:'PersonCreateCtrl',
 				controllerAs:'p',

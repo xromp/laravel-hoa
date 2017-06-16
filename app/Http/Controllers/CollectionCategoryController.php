@@ -25,4 +25,57 @@ class CollectionCategoryController extends Controller
  			'message' => ''
  		]);
     }
+
+    public function create(Request $request)
+    {
+    	$validator = Validator::make($request->all(),[
+    		'code'=> 'required',
+    		'description'=> 'required'
+		]);
+
+    	if ($validator-> fails()) {
+    		return response() -> json([
+    			'status' => 403,
+    			'data' => '',
+    			'message'=> 'Unable to save'
+    		]);
+    	}
+
+    	$formData = array(
+    		'code'=> $request-> input('code'),
+    		'description'=> $request-> input('description')
+    	);
+
+    	$isCodeExist = DB::table('collection_category')
+    		-> where('code',$formData['code'])
+    		->first();
+
+    	if ($isCodeExist) {
+    		return response() -> json([
+    			'status' => 403,
+    			'data' => '',
+    			'message'=> 'Code aleady exist.'
+    		]);	
+    	}
+
+    	$transaction = DB::transaction(function($formData) use ($formData) {
+    		$category = new Collection_category;
+
+    		$category->code 		= $formData['code'];
+    		$category->description 	= $formData['description'];
+
+    		$isSave = $category->save();
+
+    		if (!$isSave) {
+    			throw new \Exception("Error Processing Request", 1);
+    		}
+
+    		return response() -> json([
+    			'status'=>200,
+    			'message'=>'Successfully saved.',
+    			'data'=>''
+    		]);
+    	});
+    	return $transaction;
+    }
 }

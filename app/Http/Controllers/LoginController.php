@@ -15,10 +15,30 @@ class LoginController extends Controller
     	return view('login.login');
     }
 
-    public function login()
+    public function login(Request $request)
     {
+        $formData = array(
+            'username'=> $request->input('username'),
+            'password'=> $request->input('password'),
+        );
     	$login = DB::table('user')
-    		->get();
-    	dd($login);
+            -> where('username',$formData['username'])
+            -> where('password',$formData['password'])
+    		->first();
+
+        if (!$login) {
+            return response() ->json([
+                'status'=>403,
+                'message'=>'Login failed.',
+                'data'=>''
+            ]);
+        }
+
+        return response() ->json([
+            'status'=>200,
+            'message'=>'Successfully login.',
+            'data'=>''
+        ]);
+    	
     }
 }

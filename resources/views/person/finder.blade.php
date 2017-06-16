@@ -51,22 +51,29 @@
                 Name<br>
                 <small>Address</small>
               </th>
-              <th>Type</th>
-              <th>Total Contributions</th>
+              <th></th>
+              <!-- <th>Total Contributions</th> -->
             </tr>
           </thead>
           <tbody ng-repeat="person in pf.personData">
             <tr ng-click="pf.showPersonDetail(person)">
               <td>
-                <img class="img-rounded img-responsive pull-left" src="/assets/images/img.jpg" alt="" width="50" height="50">
+                <img class="img-rounded img-responsive pull-left" src="/assets/images/img.jpg" alt="" width="40" height="40">
                 <div class="col-md-6">
                   <p  style="margin-bottom: 0px;" ng-bind="person.name"></p>
                   <small  style="margin-bottom: 0px;" ng-bind="person.address"></small>
                 </div>
               </a>
               </td>
-              <td ng-bind="person.type"></td>
-              <td class="text-right" ng-bind="person.total_collection"></td>
+              <td class="">
+                <div class="pull-right">
+                  <button class="btn btn-info btn-xs" ng-click="pf.edit(collection)"><i class="glyphicon glyphicon-pencil"></i></button>
+                  <!-- <button class="btn btn-success" ng-click="pf.post(collection)">Activate</button> -->
+                  <button class="btn btn-danger btn-xs" ng-click="pf.remove(collection)"><i class="glyphicon glyphicon-remove"></i></button>
+                </div>
+              </td>
+              <!-- <td ng-bind="person.type"></td> -->
+              <!-- <td class="text-right" ng-bind="person.total_collection"></td> -->
             </tr>
             <tr style="background-color: #f7f7f7;" showdetail person="person" showdetails="person.isshowdetails"></tr>
           </tbody>

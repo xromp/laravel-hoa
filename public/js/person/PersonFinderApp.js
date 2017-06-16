@@ -32,7 +32,7 @@ define(['angular'], function() {
 		      if (person.isshowdetails) {
 		        person.isshowdetails = false;
 		      } else {
-		        person.isshowdetails = true;
+		        // person.isshowdetails = true;
 		      }
 		    };
 		    // --- Load Init --

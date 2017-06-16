@@ -1,4 +1,3 @@
-
 <div class="modal-header">
   <h5 class="modal-title" id="modal-title" ng-bind="vm.formData.title"></h5>
 </div>

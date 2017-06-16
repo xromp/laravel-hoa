@@ -14,15 +14,19 @@
 Route::get('/', function () {
     return view('layouts.master');
 });
-Route::get('/person/create','PersonController@index');
-Route::get('/person/finder','PersonController@index');
 
 // login
 Route::get('/login','LoginController@index');
 Route::post('/api/login','LoginController@login');
 
+// dashboard
+Route::get('/dashboard','DashboardController@index');
 
 // person
+Route::get('/person/create','PersonController@index');
+Route::get('/person/edit/{id}','PersonController@index');
+Route::get('/person/finder','PersonController@index');
+
 Route::post('/api/person/create','PersonController@store');
 Route::get('/api/person/get','PersonController@getPersonProfile');
 Route::get('/api/person/collection/get','PersonController@getPersonCollection');
@@ -34,6 +38,7 @@ Route::post('/api/collection/delete','CollectionController@delete');
 
 // collection_category
 Route::get('/api/collection/category/get','CollectionCategoryController@get');
+Route::post('/api/collection/category/create','CollectionCategoryController@create');
 
 
 // collection reports
@@ -56,6 +61,9 @@ Route::get('/api/expense/get','ExpenseController@get');
 Route::post('/api/expense/create','ExpenseController@create');
 Route::post('/api/expense/delete','ExpenseController@delete');
 Route::get('/api/expense/category/get','ExpenseCategoryController@get');
+Route::post('/api/expense/category/create','ExpenseCategoryController@create');
+Route::post('/api/expense/category/type/create','ExpenseCategoryTypeController@create');
+Route::post('/api/expense/category/type/get','ExpenseCategoryTypeController@get');
 // Route::group(['prefix'=>'api/person'], function() {
 // 	Route::get('/get',[
 // 		'as'=>'getPersonProfile',

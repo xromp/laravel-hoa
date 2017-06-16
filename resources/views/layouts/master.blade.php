@@ -21,7 +21,7 @@
     <base href="/">
      <!-- No Cache END-->
   </head>
-<body class="nav-md">
+<body class="nav-md" style="background-image: '/assets/images/slider-2.jpg'">
   <div class="container body">
     <div class="main_container">
     @include('layouts.sidebar')
@@ -34,11 +34,18 @@
     </div>
   </div>
   <script type="text/javascript" src="{{URL::to('assets/jquery/dist/jquery.min.js')}}"></script>
+
   <script type="text/javascript" src="{{URL::to('assets/bootstrap/dist/js/bootstrap.min.js')}}"></script>
   <script type="text/javascript" src="{{URL::to('assets/iCheck/icheck.min.js')}}"></script>
   <script type="text/javascript" src="{{URL::to('assets/switchery/dist/switchery.min.js')}}"></script>
   <script type="text/javascript" src="{{URL::to('assets/custom/js/custom.min.js')}}"></script>
+
+  <script type="text/javascript" src="{{URL::to('assets/angular/angular.min.js')}}"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0rc1/angular-route.min.js"></script>
+
   <script data-main="{{URL::to('js/module-loader/requirejs-config.js')}}" src="{{URL::to('assets/requirejs/require.js')}}"></script>
+  <script type="text/javascript" src="{{URL::to('js/layouts/SidebarApp.js')}}"></script>
+  <!-- <script type="text/javascript" src="{{URL::to('js/layouts/layouts.js')}}"></script> -->
   @yield('scripts')
 </body>
 </html>

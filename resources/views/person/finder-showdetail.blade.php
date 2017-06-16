@@ -6,7 +6,7 @@
 				<div class="left col-xs-12">
 				  	<h2 ng-bind="personDetails.contactno_mobile"></h2>
 		  			<ul class="list-unstyled">
-		  				<li><i class="fa fa-building"></i> Landline: <small ng-bind="personDetails.contactno_landline"></small></li>
+		  				<li><i class="fa fa-building"></i> Landline: <small ng-bind="personDetails.contact_telephoneno"></small></li>
 						<li><i class="fa fa-building"></i> Year moved: <small ng-bind="personDetails.year_moved"></small></li>
 						<li><i class="fa fa-building"></i> Address: <small ng-bind="personDetails.address"></small></li>
 						<li><i class="fa fa-user"></i> Representative: <small ng-bind="personDetails.representative + '('+ personDetails.representative_relationship+')'"></small></li>

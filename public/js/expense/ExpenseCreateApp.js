@@ -4,6 +4,8 @@ define([
   'use strict';
     app.lazy.controller('ExpenseCreateCtrl',ExpenseCreateCtrl)
     app.lazy.controller('ModalInfoInstanceCtrl',ModalInfoInstanceCtrl)
+    app.lazy.controller('CategoryModalCrtl',CategoryModalCrtl)
+    app.lazy.controller('CategoryTypeModalCrtl',CategoryTypeModalCrtl)
     app.lazy.factory('ExpenseCreateSrvcs', ExpenseCreateSrvcs)
 
       ExpenseCreateCtrl.$inject = ['$scope', '$filter', 'ExpenseCreateSrvcs','$uibModal','blockUI', '$http']
@@ -26,12 +28,12 @@ define([
           vm.default();
           vm.getCategoryList();
 
-          vm.categoryTypeList = [
-            {'code':'LIGHT','description':'Light','category':'UTILITIES'},
-            {'code':'WATER','description':'Water','category':'UTILITIES'},
-            {'code':'TELEPHONE','description':'Telephone','category':'UTILITIES'},
-            {'code':'GASOLINE','description':'Gasoline Roving/OB','category':'GASOLINE'},
-          ];
+          // vm.categoryTypeList = [
+          //   {'code':'LIGHT','description':'Light','category':'UTILITIES'},
+          //   {'code':'WATER','description':'Water','category':'UTILITIES'},
+          //   {'code':'TELEPHONE','description':'Telephone','category':'UTILITIES'},
+          //   {'code':'GASOLINE','description':'Gasoline Roving/OB','category':'GASOLINE'},
+          // ];
         };
 
         vm.submit = function (data) {
@@ -89,7 +91,7 @@ define([
                   resolve :{
                     formData: function () {
                       return {
-                        title: 'Collection Entry',
+                        title: 'Expense Entry',
                         message: response.data.message
                       };
                     }
@@ -141,25 +143,63 @@ define([
           });
         };
 
+        vm.getCategoryTypeList = function(data){
+          var formDataCopy = angular.copy(data);
+          formDataCopy.category_code = formDataCopy.category;
+
+          var formData = angular.toJson(formDataCopy);
+          ExpenseCreateSrvcs.getcategorytype(formData)
+          .then(function(response, status){
+            if (response.status == 200) {
+              vm.categoryTypeList = response.data.data;    
+            }
+          }, function(){
+            alert('Error!')
+          });          
+        }
+
         vm.datepickerOpen = function(i) {
           i.dtIsOpen = true;
         };
         
-        vm.addCategory = function(){
+        vm.addCategory = function(data){
 
           var modalInstance = $uibModal.open({
-            controller:'ModalInfoInstanceCtrl',
-            templateUrl:'shared.modal.info',
+            controller:'CategoryModalCrtl',
+            templateUrl:'expense.add-category',
             controllerAs: 'vm',
             resolve :{
               formData: function () {
                 return {
-                  title: 'Collection Entry',
-                  // message: response.data.message
+                  title: 'Add Category',
+                  formData: data
                 };
               }
             }
           });
+          modalInstance.result.then(function (){
+            vm.getCategoryList();
+          },function (){});
+        };
+
+        vm.addCategoryType = function(data){
+
+          var modalInstance = $uibModal.open({
+            controller:'CategoryTypeModalCrtl',
+            templateUrl:'expense.add-category-type',
+            controllerAs: 'vm',
+            resolve :{
+              formData: function () {
+                return {
+                  title: 'Add Category Type',
+                  formData: data
+                };
+              }
+            }
+          });
+          modalInstance.result.then(function (){
+            vm.getCategoryTypeList(data);
+          },function (){});
         };
 
         vm.getCategoryType = function(i){
@@ -168,6 +208,68 @@ define([
         }
 
         vm.init();
+      }
+
+      CategoryModalCrtl.$inject = ['$compile','$uibModalInstance', 'formData', 'ExpenseCreateSrvcs']
+      function CategoryModalCrtl ($compile, $uibModalInstance, formData, ExpenseCreateSrvcs) {
+        var vm = this;
+        vm.formData = formData;
+        console.log(vm.formData);
+        // vm.ok = function() {
+        //   $uibModalInstance.close();
+        // };
+        vm.submit= function(i){
+          if (vm.frmCreate.$valid) {
+            vm.frmCreate.withError = false;
+            vm.response = [];
+
+            var formDataCopy = angular.copy(i);
+
+            var formData = angular.toJson(formDataCopy);
+            ExpenseCreateSrvcs.savecategory(formData)
+            .then(function(response, status){
+              vm.response.push(response.data);
+
+            }, function(){alert('Error occured')});
+          } else {
+            vm.frmCreate.withError = true;
+          }
+        };
+
+        vm.cancel = function() {
+          $uibModalInstance.close();
+        };
+      }
+
+      CategoryTypeModalCrtl.$inject = ['$compile','$uibModalInstance', 'formData', 'ExpenseCreateSrvcs']
+      function CategoryTypeModalCrtl ($compile, $uibModalInstance, formData, ExpenseCreateSrvcs) {
+        var vm = this;
+        vm.formData = formData;
+        // vm.ok = function() {
+        //   $uibModalInstance.close();
+        // };
+        vm.submit= function(i){
+          if (vm.frmCreate.$valid) {
+            vm.frmCreate.withError = false;
+            vm.response = [];
+
+            var formDataCopy = angular.copy(i);
+            formDataCopy.category_code = vm.formData.formData.category;
+
+            var formData = angular.toJson(formDataCopy);
+            ExpenseCreateSrvcs.savecategorytype(formData)
+            .then(function(response, status){
+              vm.response.push(response.data);
+
+            }, function(){alert('Error occured')});
+          } else {
+            vm.frmCreate.withError = true;
+          }
+        };
+
+        vm.cancel = function() {
+          $uibModalInstance.close();
+        };
       }
 
       ModalInfoInstanceCtrl.$inject = ['$uibModalInstance', 'formData']
@@ -213,6 +315,30 @@ define([
             return $http({
               method:'GET',
               url: '/api/expense/category/get',
+              headers: {'Content-Type': 'application/json'}
+            })
+          },
+          savecategory: function(data) {
+            return $http({
+              method:'POST',
+              data:data,
+              url: '/api/expense/category/create',
+              headers: {'Content-Type': 'application/json'}
+            })
+          },
+          savecategorytype: function(data) {
+            return $http({
+              method:'POST',
+              data:data,
+              url: '/api/expense/category/type/create',
+              headers: {'Content-Type': 'application/json'}
+            })
+          },
+          getcategorytype: function(data) {
+            return $http({
+              method:'POST',
+              data:data,
+              url: '/api/expense/category/type/get',
               headers: {'Content-Type': 'application/json'}
             })
           },

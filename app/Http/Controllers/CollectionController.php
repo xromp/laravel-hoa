@@ -122,7 +122,7 @@ class CollectionController extends Controller
         $formData->ordate       = $request ->input('ordate');
 
         $collection = DB::table('collection')
-            ->select ('collectionid','orno','ordate','collection_category.description as category','amount_paid','posted','deleted','collection.created_at')
+            ->select ('collectionid',DB::raw('CAST(orno as UNSIGNED) as orno'),'ordate','collection_category.description as category','amount_paid','posted','deleted','collection.created_at')
             -> leftjoin('collection_category','collection_category.code','=','collection.category')
             -> where('deleted',0);
 

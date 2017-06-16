@@ -8,7 +8,7 @@ define([
     function ExpenseCtrl($scope, $filter){
       var vm = this;
 
-      vm.templateUrl = 'expense.view';
+      vm.templateUrl = 'expense.create';
 
       vm.addExpense = function (){
         vm.templateUrl='expense.create';

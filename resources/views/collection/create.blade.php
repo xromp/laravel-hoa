@@ -29,7 +29,7 @@
       <div class="form-group" ng-class="{'has-error': cc.frmCreate.orno.$invalid && cc.frmCreate.withError }">
         <label class="control-label col-md-3 col-sm-3 col-xs-12">OR No.</label>
         <div class="col-md-9 col-sm-9 col-xs-12">
-          <input type="text" name="orno" class="form-control col-md-7 col-xs-12" ng-model="cc.collectionDetails.orno" required>
+          <input type="number" name="orno" min='1' class="form-control col-md-7 col-xs-12" ng-model="cc.collectionDetails.orno" required>
           <span class="help-block" ng-show="cc.frmCreate.orno.$invalid && cc.frmCreate.withError">OR No. is required field.</span>
         </div>
       </div>
@@ -46,6 +46,16 @@
         <span class="help-block" ng-show="cc.frmCreate.ordate.$invalid && cc.frmCreate.withError">OR Date is required field.</span>
         </div>
       </div>
+
+      <div class="form-group" ng-class="{'has-error': cc.frmCreate.amount.$invalid && cc.frmCreate.withError }">
+        <label class="control-label col-md-3 col-sm-3 col-xs-12">Amount Paid. <span class="required">*</span>
+        </label>
+        <div class="col-md-9 col-sm-9 col-xs-12">
+          <input type="number" min="1" name="amount"  class="form-control col-md-7 col-xs-12" ng-model="cc.collectionDetails.amount" required>
+          <span class="help-block" ng-show="cc.frmCreate.amount.$invalid && cc.frmCreate.withError">Amount is required field.</span>
+        </div>
+      </div>
+
     </div>
   </div>
   <hr>
@@ -65,7 +75,7 @@
               <option ng-repeat="ref in cc.refList" ng-bind="ref.name" ng-value="ref.refid"></option>
             </select>
             <span class="input-group-btn">
-              <button class="btn btn-success" ng-click="cc.addRef()"><i class="glyphicon glyphicon-plus"></i></button>
+              <button class="btn btn-success" ng-click="cc.addRef(cc.collectionDetails)"><i class="glyphicon glyphicon-plus"></i></button>
             </span>
           </p>
           <!-- <input type="text" name="refid" class="form-control col-md-7 col-xs-12" ng-model="cc.collectionDetails.refid" required> -->
@@ -82,7 +92,7 @@
               <option ng-repeat="category in cc.categoryList" ng-bind="category.description" ng-value="category.code"></option>
             </select>
             <span class="input-group-btn">
-              <button class="btn btn-success" ng-click="cc.addCategory()"><i class="glyphicon glyphicon-plus"></i></button>
+              <button class="btn btn-success" ng-click="cc.addCategory(cc.collectionDetails)"><i class="glyphicon glyphicon-plus"></i></button>
             </span>
           </p>
           <!-- <input type="text" name="type"  
@@ -147,14 +157,6 @@
             <div>
               
             </div>
-
-            <div class="form-group" ng-class="{'has-error': cc.frmCreate.remarks.$invalid && cc.frmCreate.withError }">
-              <label class="control-label col-md-3 col-sm-3 col-xs-12">Remarks </label>
-              <div class="col-md-9 col-sm-9 col-xs-12">
-                <textarea name="remarks" class="form-control col-md-7 col-xs-12" rows="5" ng-model="cc.collectionDetails.remarks">
-                </textarea> 
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -163,12 +165,11 @@
 
     <div class="col-md-6">
 
-      <div class="form-group" ng-class="{'has-error': cc.frmCreate.amount.$invalid && cc.frmCreate.withError }">
-        <label class="control-label col-md-3 col-sm-3 col-xs-12">Amount Paid. <span class="required">*</span>
-        </label>
+      <div class="form-group" ng-class="{'has-error': cc.frmCreate.remarks.$invalid && cc.frmCreate.withError }">
+        <label class="control-label col-md-3 col-sm-3 col-xs-12">Remarks </label>
         <div class="col-md-9 col-sm-9 col-xs-12">
-          <input type="number" min="0" name="amount"  class="form-control col-md-7 col-xs-12" ng-model="cc.collectionDetails.amount" required>
-          <span class="help-block" ng-show="cc.frmCreate.amount.$invalid && cc.frmCreate.withError">Amount is required field.</span>
+          <textarea name="remarks" class="form-control col-md-7 col-xs-12" rows="5" ng-model="cc.collectionDetails.remarks">
+          </textarea> 
         </div>
       </div>
 

@@ -8,13 +8,20 @@ use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 use DB;
 
-use App\Expense_category;
-class ExpenseCategoryController extends Controller
+use App\Expense_category_type;
+
+class ExpenseCategoryTypeController extends Controller
 {
-    public function get()
-    {
- 		$category = DB::table('expense_category')
- 			-> select ('code', 'description')
+   	
+    public function get(Request $request)
+    {	
+    	$formData = array(
+    		'category_code'=>$request->input('category_code')
+    	);
+
+ 		$category = DB::table('expense_category_type')
+ 			-> select ('category_code','code', 'description')
+ 			-> where('category_code',$formData['category_code'])
  			-> where('active',1)
  			-> get();
 
@@ -25,11 +32,11 @@ class ExpenseCategoryController extends Controller
  		]);
     }
 
-
    	public function create(Request $request)
     {
     	$validator = Validator::make($request->all(),[
     		'code'=> 'required',
+    		'category_code'=> 'required',
     		'description'=> 'required'
 		]);
 
@@ -43,11 +50,13 @@ class ExpenseCategoryController extends Controller
 
     	$formData = array(
     		'code'=> $request-> input('code'),
+    		'category_code'=> $request-> input('category_code'),
     		'description'=> $request-> input('description')
     	);
 
-    	$isCodeExist = DB::table('expense_category')
+    	$isCodeExist = DB::table('expense_category_type')
     		-> where('code',$formData['code'])
+    		-> where('active',1)
     		->first();
 
     	if ($isCodeExist) {
@@ -59,10 +68,11 @@ class ExpenseCategoryController extends Controller
     	}
 
     	$transaction = DB::transaction(function($formData) use ($formData) {
-    		$category = new Expense_category;
+    		$category = new Expense_category_type;
 
-    		$category->code 		= $formData['code'];
-    		$category->description 	= $formData['description'];
+    		$category->code 			= $formData['code'];
+    		$category->category_code 	= $formData['category_code'];
+    		$category->description 		= $formData['description'];
 
     		$isSave = $category->save();
 

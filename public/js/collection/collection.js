@@ -5,7 +5,7 @@ define('sims.collection',[
 ], function(angular, dependencyResolver){
 	'use strict';
 	 app = angular
-		.module('sims.collection',['ngRoute','ngAnimate','ngSanitize','ui.bootstrap', 'blockUI'])
+		.module('sims.collection',['SidebarApp','ngRoute','ngAnimate','ngSanitize','ui.bootstrap', 'blockUI'])
 		.config(Config)
 
 		Config.$inject = ['$routeProvider', '$locationProvider', '$controllerProvider', '$compileProvider', '$filterProvider', '$provide', 'blockUIConfig', '$interpolateProvider']

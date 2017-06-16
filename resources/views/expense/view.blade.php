@@ -12,7 +12,8 @@
       <thead>
         <tr>
           <th>#</th>
-          <th>OR No.</th>
+          <th>PCV</th>
+          <th>Ref No.</th>
           <th>OR Date</th>
           <th>Category</th>
           <th>Amount</th>
@@ -21,9 +22,10 @@
         </tr>
       </thead>
       <tbody>
-        <tr ng-class="{'bg-success':expense.posted,'bg-danger':expense.deleted}" ng-repeat="expense in ev.expenseDetails | orderBy:'orno'">
+        <tr ng-class="{'bg-success':expense.posted,'bg-danger':expense.deleted}" ng-repeat="expense in ev.expenseDetails | orderBy:'pcv'">
           <td ><% $index+1 %></td>
-          <td class="text-right" ng-bind="expense.orno"></td>
+          <td class="text-right" ng-bind="expense.pcv"></td>
+          <td class="text-left" ng-bind="expense.orno"></td>
           <td ng-bind="expense.ordate | date:'dd-MMM-yyyy'"></td>
           <td ng-bind="expense.category"></td>
           <td class="text-right" ng-bind="expense.amount"></td>

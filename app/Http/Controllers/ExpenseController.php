@@ -25,7 +25,7 @@ class ExpenseController extends Controller
     	);
 
         $expense = DB::table('expense')
-            ->select ('expenseid','orno','ordate','expense_category.description as category','amount','posted','deleted','expense.created_at')
+            ->select ('expenseid','pcv','orno','ordate','expense_category.description as category','amount','posted','deleted','expense.created_at')
             -> leftjoin('expense_category','expense_category.code','=','expense.category')
             -> where('deleted',0);
 
@@ -51,6 +51,7 @@ class ExpenseController extends Controller
             'entityvalues'=> 'required',
             'ordate'=> 'required',
             'orno'=> 'required',
+            'establishment'=> 'required',
         ]);
 
         if ($validator-> fails()) {
@@ -71,6 +72,7 @@ class ExpenseController extends Controller
             $data['amount']         = $request-> input('amount');
             $data['entityvalues']   = $request-> input('entityvalues');
             $data['remarks']        = $request-> input('remarks');
+            $data['establishment']  = $request-> input('establishment');
 
             $isOrnoExist = $expense
                         -> where('orno','=',$data['orno'])
@@ -85,17 +87,27 @@ class ExpenseController extends Controller
                 ]);         
             } else {
                 // saving collections
-                DB::transaction(function($data) use($data){
+                $transaction = DB::transaction(function($data) use($data){
                     // dd($data['orno']);
                     $expense = new Expense;
+                    $pcv = 0;
+
+                    $pcvTemp = DB::table('expense')
+                        ->orderBy('expenseid','desc')
+                        ->first();
+
+                    $pcv = $pcvTemp->pcv +1;
                     
-                    $expense->orno      = $data['orno'];
-                    $expense->ordate    = $data['ordate'];
-                    $expense->category  = $data['category'];
-                    $expense->amount    = $data['amount'];
-                    $expense->remarks   = $data['remarks'];
+                    $expense->orno              = $data['orno'];
+                    $expense->pcv               = $pcv;
+                    $expense->ordate            = $data['ordate'];
+                    $expense->category          = $data['category'];
+                    $expense->amount            = $data['amount'];
+                    $expense->establishment     = $data['establishment'];
+                    $expense->remarks           = $data['remarks'];
                     
                     $expense->save();
+
 
                     if($expense->id)
                     {
@@ -117,15 +129,19 @@ class ExpenseController extends Controller
                     {
                         throw new \Exception('Expense not created.');
                     }
+
+                    return response()->json([
+                        'status'=> 200,
+                        'data'=>array(
+                            'pcv'=>$pcv
+                        ),
+                        'message'=>"PCV No. {$pcv}. Successfully saved."
+                    ]);         
+
                 });
 
             }
-
-            return response()->json([
-                'status'=> 200,
-                'data'=>'',
-                'message'=>'Successfully saved.'
-            ]);         
+            return $transaction;
         }    
     }
 

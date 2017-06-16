@@ -1,5 +1,4 @@
 @extends('layouts.master')
-
 @section('layouts.gloabal-templates')
 <script type="text/ng-template" id="person.finder">
 	@include('person.finder')

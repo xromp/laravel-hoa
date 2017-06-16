@@ -4,6 +4,8 @@ define([
   'use strict';
     app.lazy.controller('CollectionCreateCtrl',CollectionCreateCtrl)
     app.lazy.controller('ModalInfoInstanceCtrl',ModalInfoInstanceCtrl)
+    app.lazy.controller('CategoryModalCrtl',CategoryModalCrtl)
+    app.lazy.controller('PersonModalCrtl',PersonModalCrtl)
     app.lazy.factory('CollectionCreateSrvcs', CollectionCreateSrvcs)
 
       CollectionCreateCtrl.$inject = ['$scope', '$filter', 'CollectionCreateSrvcs','$uibModal','blockUI', '$http']
@@ -231,38 +233,46 @@ define([
           vm.stickerDetails.splice(i,1);
         };
 
-        vm.addRef = function(){
+        vm.addRef = function(data){
           var modalInstance = $uibModal.open({
-            controller:'ModalInfoInstanceCtrl',
-            templateUrl:'shared.modal.info',
+            controller:'PersonModalCrtl',
+            templateUrl:'collection.add-person',
             controllerAs: 'vm',
             resolve :{
               formData: function () {
                 return {
-                  title: 'Add person in '+ vm.collectionDetails.type
-                  // message: response.data.message
+                  title: 'Add person in '+ vm.collectionDetails.type,
+                  formData: data
                 };
               }
             }
           });
 
+          modalInstance.result.then(function (){
+            vm.getRefList(data);
+          },function (){});
+
+
         };
 
-        vm.addCategory = function(){
+        vm.addCategory = function(data){
 
           var modalInstance = $uibModal.open({
-            controller:'ModalInfoInstanceCtrl',
+            controller:'CategoryModalCrtl',
             templateUrl:'collection.add-category',
             controllerAs: 'vm',
             resolve :{
               formData: function () {
                 return {
-                  title: 'Add Category'
-                  // message: response.data.message
+                  title: 'Add Category',
+                  formData: data
                 };
               }
             }
           });
+          modalInstance.result.then(function (){
+            vm.getCategoryList();
+          },function (){});
         };
 
         vm.init();
@@ -280,6 +290,68 @@ define([
           $uibModalInstance.dismiss('cancel');
         };
       }
+
+      CategoryModalCrtl.$inject = ['$compile','$uibModalInstance', 'formData', 'CollectionCreateSrvcs']
+      function CategoryModalCrtl ($compile, $uibModalInstance, formData, CollectionCreateSrvcs) {
+        var vm = this;
+        vm.formData = formData;
+        console.log(vm.formData);
+        // vm.ok = function() {
+        //   $uibModalInstance.close();
+        // };
+        vm.submit= function(i){
+          if (vm.frmCreate.$valid) {
+            vm.frmCreate.withError = false;
+            vm.response = [];
+
+            var formDataCopy = angular.copy(i);
+
+            var formData = angular.toJson(formDataCopy);
+            CollectionCreateSrvcs.savecategory(formData)
+            .then(function(response, status){
+              vm.response.push(response.data);
+
+            }, function(){alert('Error occured')});
+          } else {
+            vm.frmCreate.withError = true;
+          }
+        };
+
+        vm.cancel = function() {
+          $uibModalInstance.close();
+        };
+      }
+
+      PersonModalCrtl.$inject = ['$compile','$uibModalInstance', 'formData', 'CollectionCreateSrvcs']
+      function PersonModalCrtl ($compile, $uibModalInstance, formData, CollectionCreateSrvcs) {
+        var vm = this;
+        vm.formData = formData.formData;
+
+        vm.submit= function(i){
+          if (vm.frmCreate.$valid) {
+            vm.frmCreate.withError = false;
+            vm.response = [];
+
+            var formDataCopy = angular.copy(i);
+            formDataCopy.type = vm.formData.type;
+            formDataCopy.action = 'CREATE';
+
+            var formData = angular.toJson(formDataCopy);
+            CollectionCreateSrvcs.saveperson(formData)
+            .then(function(response, status){
+              vm.response.push(response.data);
+
+            }, function(){alert('Error occured')});
+          } else {
+            vm.frmCreate.withError = true;
+          }
+        };
+
+        vm.cancel = function() {
+          $uibModalInstance.close();
+        };
+      }
+
 
       CollectionCreateSrvcs.$inject = ['$http']
       function CollectionCreateSrvcs($http){
@@ -314,6 +386,23 @@ define([
               headers: {'Content-Type': 'application/json'}
             })
           },
+          savecategory: function(data) {
+            return $http({
+              method:'POST',
+              data:data,
+              url: '/api/collection/category/create',
+              headers: {'Content-Type': 'application/json'}
+            })
+          },
+          saveperson: function(data) {
+            return $http({
+              method:'POST',
+              data:data,
+              url: '/api/person/create',
+              headers: {'Content-Type': 'application/json'}
+            })
+          },
+
         }
       }
 });
