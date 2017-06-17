@@ -50,6 +50,14 @@ define('sims.person',[
 					'/js/person/PersonCreateApp.js'
 				])
 			})
+			.when('/dashboard',{
+				templateUrl:'person.dashboard',
+				controller:'PersonCreateCtrl',
+				controllerAs:'p',
+				resolve:dependencyResolver([
+					// '/js/person/PersonCreateApp.js'
+				])	
+			})
 			.otherwise({template:'<p>Wrong Url.</p>'})
 
             var markUp = '';

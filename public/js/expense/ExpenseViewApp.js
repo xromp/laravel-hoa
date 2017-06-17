@@ -11,19 +11,25 @@ define([
         var vm = this;
 
         vm.query = {
-          'startdate':'',
-          'enddate':''
+          'startdate':new Date(),
+          'enddate':new Date(),
+          'posted':0,
         };
 
         vm.init = function(){
-          vm.get();
+          vm.search(vm.query);
         };
 
-        vm.get = function (data) {
+        vm.search = function (data) {
           var appBlockUI = blockUI.instances.get('blockUI');
           appBlockUI.start();
 
-          ExpenseViewSrvcs.get()
+          var formDataCopy = angular.copy(data);
+          formDataCopy.startdate = $filter('date')(formDataCopy.startdate,'yyyy-MM-dd');
+          formDataCopy.enddate = $filter('date')(formDataCopy.enddate,'yyyy-MM-dd');
+
+          var formData = angular.toJson(formDataCopy);
+          ExpenseViewSrvcs.get(formData)
           .then (function (response) {
             if (response.data.status == 200) {
               vm.expenseDetails = response.data.data;
@@ -107,6 +113,14 @@ define([
 
         };
 
+        vm.datepickerOpen = function(i,y) {
+          if (y=='DATEFROM') {
+            i.dtIsOpen = true;
+          } else if (y=='DATETO') {
+            i.dtIsOpen2 = true;
+          }
+        };
+
         vm.init();
       }
 
@@ -139,7 +153,7 @@ define([
           },
           get: function(data) {
             return $http({
-              method:'GET',
+              method:'POST',
               data:data,
               url: '/api/expense/get',
               headers: {'Content-Type': 'application/json'}

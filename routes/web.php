@@ -31,9 +31,6 @@ Route::post('/api/person/create','PersonController@store');
 Route::get('/api/person/get','PersonController@getPersonProfile');
 Route::get('/api/person/collection/get','PersonController@getPersonCollection');
 
-Route::post('/api/collection/create','CollectionController@create');
-Route::get('/api/collection/get','CollectionController@get');
-Route::post('/api/collection/delete','CollectionController@delete');
 
 
 // collection_category
@@ -43,8 +40,13 @@ Route::post('/api/collection/category/create','CollectionCategoryController@crea
 
 // collection reports
 Route::get('/collection/view','CollectionController@index');
+Route::get('/collection/create','CollectionController@index');
+Route::get('/collection/edit/{id}','CollectionController@index');
 Route::get('/collection/reports','CollectionController@index');
 Route::get('/collection/reports/orlisting','CollectionController@reports_orlisting');
+Route::post('/api/collection/get','CollectionController@get');
+Route::post('/api/collection/create','CollectionController@create');
+Route::post('/api/collection/delete','CollectionController@delete');
 
 
 // transaction reports
@@ -57,7 +59,7 @@ Route::post('/api/transaction/post','TransactionController@post');
 
 // expenses
 Route::get('/expense/view','ExpenseController@index');
-Route::get('/api/expense/get','ExpenseController@get');
+Route::post('/api/expense/get','ExpenseController@get');
 Route::post('/api/expense/create','ExpenseController@create');
 Route::post('/api/expense/delete','ExpenseController@delete');
 Route::get('/api/expense/category/get','ExpenseCategoryController@get');

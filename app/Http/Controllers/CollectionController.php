@@ -115,25 +115,64 @@ class CollectionController extends Controller
 
     public function get(Request $request)
     {
-        $formData = new Collection;
-
-        $formData->collectionid = $request ->input('collectionid');
-        $formData->orno         = $request ->input('ordno');
-        $formData->ordate       = $request ->input('ordate');
+        $formData = array(
+            'collectionid'=>$request->input('collectionid'),
+            'orno'=>$request->input('orno'),
+            'startdate'=>$request->input('startdate'),
+            'enddate'=>$request->input('enddate'),
+            'posted'=>$request->input('posted')
+        );
 
         $collection = DB::table('collection')
-            ->select ('collectionid',DB::raw('CAST(orno as UNSIGNED) as orno'),'ordate','collection_category.description as category','amount_paid','posted','deleted','collection.created_at')
-            -> leftjoin('collection_category','collection_category.code','=','collection.category')
-            -> where('deleted',0);
+            ->select (
+                'collectionid',
+                DB::raw('CAST(orno as UNSIGNED) as orno'),
+                'referenceid',
+                'type',
+                'ordate',
+                'collection_category.description as category_description', 
+                'collection_category.code as category_code',
+                DB::raw('CAST(amount_paid as DECIMAL(18,2)) as amount'),
 
-        if ($formData->orno) {
-            $collection -> where('orno',$formData->orno);            
+                'posted',
+                'posted',
+                'deleted',
+                'remarks',
+                'collection.created_at')
+            -> leftjoin('collection_category','collection_category.code','=','collection.category')
+            -> where('deleted',0)
+            -> where('posted',$formData['posted']);
+
+        if ($formData['orno']) {
+            $collection -> where('orno',$formData['orno']);            
+        }
+        if ($formData['collectionid']) {
+            $collection -> where('collectionid',$formData['collectionid']);            
+        }
+        if ($formData['startdate'] && $formData['enddate']) {
+            $collection -> whereBetween('ordate',[$formData['startdate'],$formData['enddate']]);            
         }
         $collection = $collection->get();
+        $result = json_decode($collection, true);
+        // dd($result);
+
+        foreach ($result as $key => $col) {
+            $collection_line = new Collection_line;
+
+            $collection_line = DB::table('collection_line')
+                ->where('collectionid',$col['collectionid'])
+                ->first();
+
+            $result[$key]['entityvalues'] = array(
+                'entityvalue1'=>$collection_line->entityvalue1,
+                'entityvalue2'=>$collection_line->entityvalue2,
+                'entityvalue3'=>$collection_line->entityvalue3
+            );
+        }
 
         return response()-> json([
             'status'=>200,
-            'data'=>$collection,
+            'data'=>$result,
             'message'=>''
         ]);
     }

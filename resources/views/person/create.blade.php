@@ -188,7 +188,7 @@
             <div class="pull-right">
               <button type="reset" class="btn btn-default" ng-click="p.cancel()">Cancel</button>
               <button type="reset" class="btn btn-default" ng-click="p.reset()">Reset</button>
-              <button type="submit" class="btn btn-success" ng-click="p.submit(p.personInfo)" ng-disabled="p.frmCreate.$invalid && p.frmCreate.withError" ng-bind="(p.action=='CREATE')?'Submit':'Update'"></button>
+              <button type="submit" class="btn btn-success" ng-click="p.submit(p.personInfo)" ng-disabled="p.frmCreate.$invalid && p.frmCreate.withError" ng-bind="(p.personInfo.action=='CREATE')?'Submit':'Update'"></button>
             </div>
           </div>
         </form>

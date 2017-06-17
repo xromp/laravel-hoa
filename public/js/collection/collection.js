@@ -32,6 +32,14 @@ define('sims.collection',[
 					'/js/collection/CollectionCreateApp.js'
 				])
 			})
+			.when('/collection/edit/:id',{
+				templateUrl:'collection.create',
+				controller:'CollectionCreateCtrl',
+				controllerAs:'p',
+				resolve:dependencyResolver([
+					'/js/collection/CollectionCreateApp.js'
+				])
+			})
 			.when('/collection/view',{
 				templateUrl:'collection.base',
 				controller:'CollectionCtrl',

@@ -9,9 +9,6 @@
 <script type="text/ng-template" id="person.create">
 	@include('person.create')
 </script>
-<script type="text/ng-template" id="person.dashboard">
-	@include('person.dashboard')
-</script>
 @endsection
 
 @section('scripts')

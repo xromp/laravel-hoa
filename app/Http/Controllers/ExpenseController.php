@@ -21,16 +21,23 @@ class ExpenseController extends Controller
     public function get(Request $request)
     {
     	$formData = array(
-    		'orno'=> $request-> input('orno')
+    		'orno'=> $request-> input('orno'),
+            'startdate'=> $request-> input('startdate'),
+            'enddate'=> $request-> input('enddate'),
+            'posted'=> $request-> input('posted')
     	);
 
         $expense = DB::table('expense')
             ->select ('expenseid','pcv','orno','ordate','expense_category.description as category','amount','posted','deleted','expense.created_at')
             -> leftjoin('expense_category','expense_category.code','=','expense.category')
-            -> where('deleted',0);
+            -> where('deleted',0)
+            ->where('posted',$formData['posted']);
 
         if ($formData['orno']) {
             $expense -> where('orno',$formData['orno']);            
+        }
+        if ($formData['startdate'] && $formData['enddate']) {
+            $expense -> whereBetween('ordate',[$formData['startdate'],$formData['enddate']]);
         }
         $expense = $expense->get();
 

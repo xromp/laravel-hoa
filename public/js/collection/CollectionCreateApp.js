@@ -8,8 +8,8 @@ define([
     app.lazy.controller('PersonModalCrtl',PersonModalCrtl)
     app.lazy.factory('CollectionCreateSrvcs', CollectionCreateSrvcs)
 
-      CollectionCreateCtrl.$inject = ['$scope', '$filter', 'CollectionCreateSrvcs','$uibModal','blockUI', '$http']
-      function CollectionCreateCtrl($scope, $filter, CollectionCreateSrvcs, $uibModal, blockUI, $http){
+      CollectionCreateCtrl.$inject = ['$scope', '$window', '$filter', '$routeParams', 'CollectionCreateSrvcs','$uibModal','blockUI', '$http']
+      function CollectionCreateCtrl($scope, $window, $filter, $routeParams, CollectionCreateSrvcs, $uibModal, blockUI, $http){
         var vm = this;
 
         vm.collectionDetails = {
@@ -17,8 +17,14 @@ define([
           refid:'',
           qty:1,
           amount:0,
-          category:'CARSTICKER'
+          category:'CARSTICKER',
+          action:'CREATE'
         };
+
+        if ($routeParams.id) {
+          vm.collectionDetails.action = 'EDIT';
+          vm.collectionDetails.collectionid = $routeParams.id;
+        }
 
         vm.init  = function() {
           vm.getOrList();
@@ -26,7 +32,7 @@ define([
 
           vm.typeList = [
             {'id':1,'code':'HOMEOWNER','description':'Homeowner'},
-            {'id':2,'code':'OUTSIDE','description':'Outside'}
+            {'id':2,'code':'OUTSIDE','description':'Non-Homeowner'}
           ];
 
           vm.month = [
@@ -50,6 +56,19 @@ define([
           vm.stickerDetails = [
             {'stickerid':'', 'plateno':''}
           ]
+
+          // load collection details if edit.
+          if (vm.collectionDetails.action == 'CREATE') {
+
+          } else if (vm.collectionDetails.action == 'EDIT') {
+            var data = {
+              'posted':0,
+              'action':'EDIT',
+              'collectionid':vm.collectionDetails.collectionid
+            };
+
+            vm.get(data);
+          }
         };
 
         vm.submit = function (data) {
@@ -128,14 +147,20 @@ define([
 
         vm.get = function (data) {
           var dataCopy = angular.copy(data)
-          data.person00id = 1;
           var formData = angular.toJson(dataCopy);
 
           CollectionCreateSrvcs.get(data)
           .then (function (response) {
-            if (response.status == 200) {
-            }
+            if (response.data.status == 200) {
+              vm.collectionDetails = response.data.data[0];
+              vm.collectionDetails.ordate = new Date(vm.collectionDetails.ordate);
+              vm.collectionDetails.amount = parseFloat(vm.collectionDetails.amount);
 
+              if (vm.collectionDetails.category_code == 'MONTHLYDUES') {
+                vm.year = ['2017','2018'];
+                vm.populateMonths();
+              }
+            }
           },function(){ alert("Bad Request!")})
         };
 
@@ -144,7 +169,8 @@ define([
         };
 
         vm.cancel = function () {
-          $scope.$parent.$parent.ce.templateUrl ='collection.view';
+          // $scope.$parent.$parent.ce.templateUrl ='collection.view';
+          $window.location.href = '/collection/view';
         };
         
         vm.getOrList = function() {
@@ -157,7 +183,6 @@ define([
 
         vm.getRefList = function(data) {
           var formDataCopy = angular.copy(data);
-          vm.refList = [];
 
           // var formData = angular.toJson(formDataCopy);
           CollectionCreateSrvcs.getperson(formDataCopy)
@@ -366,9 +391,9 @@ define([
           },
           get: function(data) {
             return $http({
-              method:'GET',
+              method:'POST',
               data:data,
-              url: baseUrlApi + '/api/person?person00id='+ data.person00id,
+              url: '/api/collection/get',
               headers: {'Content-Type': 'application/json'}
             })
           },

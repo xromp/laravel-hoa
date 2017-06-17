@@ -13,7 +13,7 @@ define([
         vm.personInfo.action = 'CREATE';
         vm.personInfo.type = 'HOMEOWNER';
 
-        if ($routeParams.personid) {
+        if ($routeParams.id) {
           vm.editInfo = {};
           vm.personInfo.personid = $routeParams.personid;
 
@@ -31,7 +31,7 @@ define([
           if (vm.frmCreate.$valid) {
             vm.frmCreate.withError = false;
             var dataCopy = angular.copy(data);
-            dataCopy.action = 'EDIT';
+            dataCopy.action = vm.personInfo.action;
             dataCopy.birthday = $filter('date')(dataCopy.birthday,'yyyy-MM-dd');
             
             var formData = angular.toJson(dataCopy);

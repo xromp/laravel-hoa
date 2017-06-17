@@ -6,24 +6,31 @@ define([
     app.lazy.controller('ModalInfoInstanceCtrl',ModalInfoInstanceCtrl)
     app.lazy.factory('CollectionViewSrvcs', CollectionViewSrvcs)
 
-      CollectionViewCtrl.$inject = ['$scope', '$filter', 'CollectionViewSrvcs','$uibModal','blockUI', '$http']
-      function CollectionViewCtrl($scope, $filter, CollectionViewSrvcs, $uibModal, blockUI, $http){
+      CollectionViewCtrl.$inject = ['$scope', '$window', '$filter', 'CollectionViewSrvcs','$uibModal','blockUI', '$http']
+      function CollectionViewCtrl($scope, $window, $filter, CollectionViewSrvcs, $uibModal, blockUI, $http){
         var vm = this;
 
         vm.query = {
-          'startdate':'',
-          'enddate':''
+          'startdate':new Date(),
+          'enddate':new Date(),
+          'posted':false,
+          'orno':''
         };
 
         vm.init = function(){
-          vm.get();
+          vm.search(vm.query);
         };
 
-        vm.get = function (data) {
+        vm.search = function (data) {
           var appBlockUI = blockUI.instances.get('blockUI');
           appBlockUI.start();
 
-          CollectionViewSrvcs.get()
+          var formDataCopy = angular.copy(data);
+          formDataCopy.startdate = $filter('date')(formDataCopy.startdate,'yyyy-MM-dd');
+          formDataCopy.enddate = $filter('date')(formDataCopy.enddate,'yyyy-MM-dd');
+
+          var formData = angular.toJson(formDataCopy);
+          CollectionViewSrvcs.get(formData)
           .then (function (response) {
             if (response.data.status == 200) {
               vm.collectionDetails = response.data.data;
@@ -37,7 +44,8 @@ define([
         };
 
         vm.addCollection = function (){
-          vm.templateUrl='collection.create';
+          // vm.templateUrl='collection.create';
+          $window.location.href ='/collection/create';
         };
         
         vm.post = function(i) {
@@ -75,7 +83,15 @@ define([
         };
 
         vm.edit = function(i) {
+          $window.location.href='/collection/create?id='+i.collectionid;
+        };
 
+        vm.datepickerOpen = function(i,y) {
+          if (y=='DATEFROM') {
+            i.dtIsOpen = true;
+          } else if (y=='DATETO') {
+            i.dtIsOpen2 = true;
+          }
         };
 
         vm.remove = function(i) {
@@ -140,7 +156,7 @@ define([
           },
           get: function(data) {
             return $http({
-              method:'GET',
+              method:'POST',
               data:data,
               url: '/api/collection/get',
               headers: {'Content-Type': 'application/json'}

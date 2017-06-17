@@ -21,7 +21,7 @@
     <base href="/">
      <!-- No Cache END-->
   </head>
-<body class="nav-md" style="background-image: '/assets/images/slider-2.jpg'">
+<body class="nav-md">
   <div class="container body">
     <div class="main_container">
     @include('layouts.sidebar')

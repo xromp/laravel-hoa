@@ -1,7 +1,55 @@
 <div ng-controller="CollectionViewCtrl as cv">
+  <div class="alert alert-success">
+    <div class="row">
+      <div class="col-md-5">
+        OR Date
+        <div class="form-group">
+          <div class="col-md-6">
+            <p class="input-group">
+              <input type="text" class="form-control" name="ordate" uib-datepicker-popup="MM/dd/yyyy" ng-model="cv.query.startdate" is-open="cv.dtIsOpen" datepicker-options="dateOptions" close-text="Close" alt-input-formats="altInputFormats" placeholder="From" />
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="cv.datepickerOpen(cv,'DATEFROM')"><i class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+            </p>
+          </div>
+
+          <div class="col-md-6">
+            <p class="input-group">
+              <input type="text" class="form-control" name="ordate" uib-datepicker-popup="MM/dd/yyyy" ng-model="cv.query.enddate" is-open="cv.dtIsOpen2" datepicker-options="dateOptions" close-text="Close" alt-input-formats="altInputFormats"/ placeholder="To">
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="cv.datepickerOpen(cv,'DATETO')"><i class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        OR No.
+        <div class="form-group">
+          <div class="col-md-12">
+            <input type="text" name="searchorno" class="form-control" ng-model="cv.query.orno">
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        Posted
+        <div class="form-group">
+          <div class="col-md-5">
+            <input type="checkbox" name="posted" class="" ng-model="cv.query.posted" style="zoom:1.8;">
+          </div>
+        </div>
+      </div>
+      <div class="pull-right">
+        <button class="btn btn-default" ng-click="cv.search(cv.query)"><i class="glyphicon glyphicon-search"></i></button>
+      </div>
+    </div>
+  </div>
+
   <div class="row">
     <div class="pull-right">
-      <button class="btn btn-success" ng-click="ce.addCollection()">
+      <button class="btn btn-success" ng-click="cv.addCollection()">
         <i class="glyphicon glyphicon-plus"></i>
         Add New Collection
       </button>
@@ -26,7 +74,7 @@
           <td class="text-right" ng-bind="collection.orno"></td>
           <td ng-bind="collection.ordate | date:'dd-MMM-yyyy'"></td>
           <td ng-bind="collection.category"></td>
-          <td class="text-right" ng-bind="collection.amount_paid"></td>
+          <td class="text-right" ng-bind="collection.amount"></td>
           <td ng-bind="collection.created_at | date:'dd-MMM-yyyy'"></td>
           <td class="">
             <div class="pull-right">
