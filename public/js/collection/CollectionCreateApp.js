@@ -17,7 +17,7 @@ define([
           refid:'',
           qty:1,
           amount:0,
-          category:'CARSTICKER',
+          category_code:'CARSTICKER',
           action:'CREATE'
         };
 

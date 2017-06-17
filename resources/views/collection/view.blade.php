@@ -73,7 +73,7 @@
           <td ><% $index+1 %></td>
           <td class="text-right" ng-bind="collection.orno"></td>
           <td ng-bind="collection.ordate | date:'dd-MMM-yyyy'"></td>
-          <td ng-bind="collection.category"></td>
+          <td ng-bind="collection.category_description"></td>
           <td class="text-right" ng-bind="collection.amount"></td>
           <td ng-bind="collection.created_at | date:'dd-MMM-yyyy'"></td>
           <td class="">

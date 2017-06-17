@@ -24,12 +24,12 @@ class CollectionController extends Controller
 
     	$validator = Validator::make($request->all(),[
 			'amount'=> 'required',
-    		'category'=> 'required',
+    		'category_code'=> 'required',
     		'entityvalues'=> 'required',
     		'ordate'=> 'required',
     		'orno'=> 'required',
     		'orno'=> 'required',
-    		'refid'=> 'required',
+    		'referenceid'=> 'required',
     		'type'=> 'required'    	
 		]);
 
@@ -48,9 +48,9 @@ class CollectionController extends Controller
             $data['orno'] 			= $request-> input('orno');
             $data['ordate'] 		= $request-> input('ordate');
             $data['type']			= $request-> input('type');
-            $data['referenceid'] 	= $request-> input('refid');
-            $data['category'] 		= $request-> input('category');
-            $data['amount_paid'] 	= $request-> input('amount');
+            $data['referenceid'] 	= $request-> input('referenceid');
+            $data['category_code'] 	= $request-> input('category_code');
+            $data['amount'] 	= $request-> input('amount');
             $data['entityvalues'] 	= $request-> input('entityvalues');
             $data['remarks']        = $request-> input('remarks');
 
@@ -75,8 +75,8 @@ class CollectionController extends Controller
 	            	$collection->ordate 		= $data['ordate'];
 	            	$collection->type 			= $data['type'];
 	            	$collection->referenceid 	= $data['referenceid'];
-	            	$collection->category 		= $data['category'];
-	            	$collection->amount_paid 	= $data['amount_paid'];
+	            	$collection->category 		= $data['category_code'];
+	            	$collection->amount_paid 	= $data['amount'];
                     $collection->remarks    = $data['remarks'];
         		    
 	            	$collection->save();

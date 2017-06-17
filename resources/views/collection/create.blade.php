@@ -112,7 +112,7 @@
                   <div class="panel-content">
                     <br>
                     <!-- MONTH DUES-->
-                    <div  ng-if="cc.collectionDetails.category == 'MONTHLYDUES'">
+                    <div  ng-if="cc.collectionDetails.category_code == 'MONTHLYDUES'">
                       <div class="form-group">
                         <div class="pull-right">
                           <button class="btn btn-danger" ng-click="cc.modifyYear('LESS')"><i class="glyphicon glyphicon-plus"></i> Prev Year</button>
@@ -136,7 +136,7 @@
                     <!-- END MONTHLY DUES -->
 
                     <!--CAR Sticker  -->
-                    <div ng-if="cc.collectionDetails.category == 'CARSTICKER'">
+                    <div ng-if="cc.collectionDetails.category_code == 'CARSTICKER'">
                       <div class="form-group">
                         <div class="form-group" ng-repeat="sticker in cc.stickerDetails">
                           <div class="col-md-4 col-md-offset-3">
